@@ -55,7 +55,7 @@ public class NetworkCommunicator: TransportHandler, MessageEncoder, MessageDecod
       return
     case "browser":
       user = User(inLink: link, inId: id, inConnected: false, peerType: .BROWSER, name: name)
-      checkForNewUsers(user!)
+      checkForNewBrowser(user!)
       return
     case "invitation":
       user = findUser(id)
@@ -201,8 +201,28 @@ public class NetworkCommunicator: TransportHandler, MessageEncoder, MessageDecod
       self.sendEvent(withName: "detectedUser", body: user.getJSUser("new user"))
     }
   }
+
+    fileprivate func checkForNewBrowser(_ user: User) {
+    serialQueue.sync {
+      let nearbyUserCount = nearbyUsers.count
+
+      for i in 0..<nearbyUserCount {
+        if nearbyUsers[i].deviceId == user.deviceId && nearbyUsers[i].mode != user.mode {
+          nearbyUsers[i].mode = user.mode;
+          return;
+        } else if nearbyUsers[i].deviceId == user.deviceId {
+          self.sendEvent(withName: "redetectedUser", body: user.getJSUser("new user"))          
+          return;
+        }
+      }
+
+      nearbyUsers.append(user)
+
+      self.sendEvent(withName: "detectedUser", body: user.getJSUser("new user"))
+    }
+  }
   
   override open func supportedEvents() -> [String]! {
-    return ["lostUser","detectedUser", "messageReceived", "connectedToUser", "receivedInvitation"]
+    return ["lostUser", "detectedUser", "redetectedUser", "messageReceived", "connectedToUser", "receivedInvitation"]
   }
 }

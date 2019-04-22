@@ -57,7 +57,7 @@ public class NetworkCommunicator extends TransportHandler implements MessageDeco
                 return;
             case "browser":
                 user = new User(id, displayName, link, false, type);
-                checkForNewUser(user);
+                checkForNewBrowser(user);
                 return;
             case "invitation":
                 user = findUser(id);
@@ -251,6 +251,16 @@ public class NetworkCommunicator extends TransportHandler implements MessageDeco
     }
     private void checkForNewUser(User user) {
         if(findUser(user.deviceId) != null) {
+            return;
+        }
+        nearbyUsers.add(user);
+        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("detectedUser", user.getJSUser());
+    }
+    private void checkForNewBrowser(User user) {
+        if(findUser(user.deviceId) != null) {
+            context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+              .emit("redetectedUser", user.getJSUser());
             return;
         }
         nearbyUsers.add(user);
