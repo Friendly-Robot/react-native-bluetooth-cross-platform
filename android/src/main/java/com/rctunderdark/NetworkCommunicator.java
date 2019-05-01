@@ -23,6 +23,7 @@ public class NetworkCommunicator extends TransportHandler implements MessageDeco
     private String deviceDelimeter = "$#%";
     private String deviceID = Settings.Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
     private String displayName;
+    private String redetectedID = "";
     private Timer broadcastTimer = null;
     private Boolean isRunning = false;
     private User.PeerType type = User.PeerType.OFFLINE;
@@ -56,6 +57,11 @@ public class NetworkCommunicator extends TransportHandler implements MessageDeco
                 checkForNewUser(user);
                 return;
             case "browser":
+                if (this.redetectedID == id) {
+                  this.redetectedID = "";
+                  return;
+                }
+                this.redetectedID = id;
                 user = new User(id, displayName, link, false, type);
                 checkForNewBrowser(user);
                 return;
