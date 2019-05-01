@@ -11,7 +11,7 @@ public class NetworkCommunicator: TransportHandler, MessageEncoder, MessageDecod
   private var deviceDelimeter: String = "$#%";
   private var advertiseTimer: Timer? = nil
   private let deviceId: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
-  private let redetectedID: String = "";
+  private var redetectedID: String = "";
   private let displayName: String = UIDevice.current.name
   private var type: User.PeerType = User.PeerType.OFFLINE
   
