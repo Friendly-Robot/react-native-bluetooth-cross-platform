@@ -39,6 +39,9 @@ class NetworkManager {
       callback(peers)
     })
   }
+  clearNearbyPeers() {
+    NativeManager.clearNearbyPeers()
+  }
   getConnectedPeers(callback) {
     NativeManager.getConnectedPeers((peers) => {
       callback(peers)

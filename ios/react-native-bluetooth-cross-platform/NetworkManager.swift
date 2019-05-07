@@ -62,6 +62,9 @@ public class NetworkManager: NetworkCommunicator, ReactNearby {
     }
     callback([jsUsers])
   }
+  @objc public  func clearNearbyPeers() {
+    nearbyUsers.removeAll()
+  }
   @objc open func inviteUser(_ id: String) {
     let user = self.findUser(id)
     if(user != nil) {
