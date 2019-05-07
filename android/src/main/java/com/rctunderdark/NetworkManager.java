@@ -95,6 +95,10 @@ public class NetworkManager extends ReactContextBaseJavaModule implements ReactN
         successCallback.invoke(jsArray);
     }
     @ReactMethod
+    public void clearNearbyPeers() {
+        this.networkCommunicator.nearbyUsers.clear();
+    }
+    @ReactMethod
     public void inviteUser(String userId) {
         sendMessage("invitation", userId);
     }
